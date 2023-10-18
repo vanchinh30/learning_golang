@@ -50,6 +50,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Login page")
 }
 
+func QueryParamHandler(w http.ResponseWriter, r *http.Request) {
+    query := r.URL.Query()
+    name := query.Get("name")
+    age := query.Get("age")
+
+    if name != "" {
+        fmt.Fprintf(w, "Name: %s\n", name)
+    } else {
+        fmt.Fprintln(w, "Name not exist")
+    }
+    
+    if age != "" {
+        fmt.Fprintf(w, "Age: %s", age)
+    } else {
+        fmt.Fprintln(w, "Age not exist")
+    }
+
+}
+
 func main() {
     r := mux.NewRouter()
 
@@ -57,6 +76,7 @@ func main() {
     r.HandleFunc("/info/{name}", GetInfoHandler)
 	r.HandleFunc("/hello", HelloWorld)
 	r.HandleFunc("/login", Login)
+    r.HandleFunc("/query", QueryParamHandler)
 
 	r.Handle("/secure", AuthMiddleware(http.HandlerFunc(SecureHandler)))
 
